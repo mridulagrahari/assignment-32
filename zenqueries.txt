@@ -1,0 +1,188 @@
+use zenClass
+
+db.createCollection("users",
+      {
+      //capped: false,
+      //   timeseries: {                  // Added in MongoDB 5.0
+      //      timeField: "timestamp",      // required for time series collections
+      //      metaField: "data",
+      //      granularity: "hours"
+      //   },
+      //expireAfterSeconds: 24*60*60
+      //size: 5242880, //capped collection maximum size
+      //max:5000, // maximum number of documents for the collection
+      //validator: <document>,
+      //validationLevel: <string>,
+      //validationAction: <string>,
+      //viewOn: <string>, 
+      //pipeline: <pipeline>,          // Added in MongoDB 3.4
+      //collation: <document>,         // Added in MongoDB 3.4
+      //writeConcern: <document>
+      }
+)
+
+
+db.createCollection("topics",
+      {
+      //capped: false,
+      //   timeseries: {                  // Added in MongoDB 5.0
+      //      timeField: "timestamp",      // required for time series collections
+      //      metaField: "data",
+      //      granularity: "hours"
+      //   },
+      //expireAfterSeconds: 24*60*60
+      //size: 5242880, //capped collection maximum size
+      //max:5000, // maximum number of documents for the collection
+      //validator: <document>,
+      //validationLevel: <string>,
+      //validationAction: <string>,
+      //viewOn: <string>, 
+      //pipeline: <pipeline>,          // Added in MongoDB 3.4
+      //collation: <document>,         // Added in MongoDB 3.4
+      //writeConcern: <document>
+      }
+)   
+
+db.users.insert([{
+    student_id: 1,
+    name:"Rajeshwari",
+    email:"rajest@gmail.com",
+    dob: "22-05-1990",
+    age: 26,
+    status: 1,
+    mentor_id: 1,
+    course_id: 25,
+    created_at: "15-05-2021"
+}]);
+
+
+db.users.find({})
+   .projection({})
+   .sort({_id:-1})
+   .limit(100)
+
+Find all the topics and tasks which are thought in the month of October
+
+db.topics.find({thought_dt:/oct/})
+
+Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+
+var arr_dt = []
+db.company_drives.find({}).forEach((it)=> {
+   print(new Date("15-oct-2020") <= new Date(it.drive_dt) && new Date("31-oct-2020") >= new Date(it.drive_dt))
+    if(new Date("15-oct-2020") <= new Date(it.drive_dt) && new Date("31-oct-2020") >= new Date(it.drive_dt)){
+        arr_dt.push(it);
+    }
+});
+print(arr_dt)
+
+Find all the company drives and students who are appeared for the placement.
+
+db.company_drives.find({}).projection({candidate_dt:1})
+
+Find the number of problems solved by the user in codekata
+
+db.codekata.insert([{
+    student_id:1,
+    problems_count:10,
+    lastAccess_dt: "22-nov-2020",
+    course_id: 1,
+    status: 1,
+}]);
+
+db.codekata.find({}).projection({problems_count:1})
+
+
+Find all the mentors with who has the mentee's count more than 15
+db.createCollection("mentors",
+      {
+      //capped: false,
+      //   timeseries: {                  // Added in MongoDB 5.0
+      //      timeField: "timestamp",      // required for time series collections
+      //      metaField: "data",
+      //      granularity: "hours"
+      //   },
+      //expireAfterSeconds: 24*60*60
+      //size: 5242880, //capped collection maximum size
+      //max:5000, // maximum number of documents for the collection
+      //validator: <document>,
+      //validationLevel: <string>,
+      //validationAction: <string>,
+      //viewOn: <string>, 
+      //pipeline: <pipeline>,          // Added in MongoDB 3.4
+      //collation: <document>,         // Added in MongoDB 3.4
+      //writeConcern: <document>
+      }
+)   
+
+db.mentors.insert([{
+    mentor_id:1,
+    mentor_name:"Siva",
+    course_id:1,
+    mentees: [{student_id:1},{student_id:5},{student_id:8},{student_id:18},{student_id:100},{student_id:101},{student_id:102},{student_id:1103},{student_id:125},{student_id:141},{student_id:1478},{student_id:1789},{student_id:1478},{student_id:2478},{student_id:4781},{student_id:1789},{student_id:78957},{student_id:1248}],
+    created_dt: "22-nov-2020",
+    status: 1,
+},{
+    mentor_id:1,
+    mentor_name:"Siva",
+    course_id:1,
+    mentees: [{student_id:1},{student_id:5}],
+    created_dt: "22-nov-2020",
+    status: 1,
+}]);
+
+var mentors_Data = [];
+db.mentors.find({}).forEach((it)=> { 
+      if(it.mentees.length > 15)
+      mentors_Data.push(it);
+});
+print(mentors_Data)
+
+Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+
+db.createCollection("tasks",
+      {
+      //capped: false,
+      //   timeseries: {                  // Added in MongoDB 5.0
+      //      timeField: "timestamp",      // required for time series collections
+      //      metaField: "data",
+      //      granularity: "hours"
+      //   },
+      //expireAfterSeconds: 24*60*60
+      //size: 5242880, //capped collection maximum size
+      //max:5000, // maximum number of documents for the collection
+      //validator: <document>,
+      //validationLevel: <string>,
+      //validationAction: <string>,
+      //viewOn: <string>, 
+      //pipeline: <pipeline>,          // Added in MongoDB 3.4
+      //collation: <document>,         // Added in MongoDB 3.4
+      //writeConcern: <document>
+      }
+)   
+
+db.tasks.insert([{
+    student_id:1,
+    course_id:1,
+    task_id: 1,
+    task_name: "Youtube App",
+    status: 1,
+    mentor_id: 1,
+    created_at: "15-may-2019"
+},{
+    student_id:10,
+    course_id:1,
+    task_id: 1,
+    task_name: "Twitter App",
+    status: 1,
+    mentor_id: 1,
+    created_at: "16-oct-2020"
+},{
+    student_id:5,
+    course_id:1,
+    task_id: 1,
+    task_name: "Youtube App",
+    status: 1,
+    mentor_id: 1,
+    created_at: "10-oct-2020"
+}]);
